@@ -5,7 +5,7 @@ Incremental data pipeline on Databricks: Auto Loader, Delta Lake, MERGE, medalli
 
 An end-to-end data pipeline built on Databricks (Free Edition) with Delta Lake and Unity Catalog. It ingests taxi trip files as they arrive, cleans them, quarantines bad records, and produces analytics tables. Every stage is incremental and safe to re-run.
 
-**Built by:** *[Your name]* | **Contact:** *[LinkedIn / email]*
+**Built by:** *[Olayemi Ajayi]* | **Contact:** *[https://www.linkedin.com/in/olayemi-ajayi-a8a04b223/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BKdWt%2BLwJTKeCQEdtNikpRA%3D%3D /olayemiamosajayi@yahoo.com]*
 
 ---
 
