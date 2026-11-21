@@ -74,7 +74,26 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 | Quality check on first 20,000 rows | 19,797 valid, 203 rejected (**1.02%**), all `non_positive_fare` |
 | Incremental MERGE after third batch | 10,000 new rows processed. Silver 29,691 + quarantine 309 = 30,000, matching bronze exactly |
 | Re-run with no new data | **0** rows processed, and silver stayed at 29,691 |
-| Hourly demand | Lowest around 5 AM, rising through the morning toward a midday peak |
+| Hourly demand | Quiet in the early morning, rising through the day to a peak at 6 PM (2,000 trips) |
+### Screenshots
+
+**Simulated data arrives as files**
+
+![Generator output: five batches of 2,000 trips](docs/generator_output.png)
+
+**Bronze: Auto Loader loads only new files (10,000 rows, then 20,000)**
+
+![Bronze after first load: 10,000 rows](docs/bronze_10000.png)
+![Bronze after second load: 20,000 rows](docs/bronze_20000.png)
+
+**Silver: data quality rules quarantine bad rows (1.02%)**
+
+![Quality report: 19,797 valid, 203 rejected](docs/quality_report.png)
+
+**Incremental MERGE: only new rows are processed, and re-runs are safe**
+
+![MERGE processes 10,000 new rows](docs/merge_10000_new_rows.png)
+![Re-run processes 0 rows](docs/merge_rerun_zero.png)
 
 
 ## Design decisions
