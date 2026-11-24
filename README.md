@@ -64,6 +64,10 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 **4. Incremental silver (`03b_silver_incremental_merge`).** Finds the latest `_ingested_at` already processed, reads only newer bronze rows, and uses Delta `MERGE` to upsert into silver and quarantine. Re-running changes nothing. Gold tables are then refreshed from silver.
 
+**5. Zone demand history (`04_scd2_zone_tier`).** Classifies every pickup zip as high, medium or low demand, in thirds by trip volume. The table is a slowly changing dimension (SCD Type 2): when a zone moves to a different tier, its old row is closed with an end date (`effective_to`, `is_current = false`) and a new current row is added, so the full history is kept. Change Data Feed is enabled on the table, so every insert and update can be read with `table_changes`.
+
+**6. Orchestration (`nyc_taxi_lakehouse_pipeline` Databricks Job).** Runs the pipeline end to end as a four-task workflow on serverless compute: `generate_events`, then `bronze_autoloader`, then `silver_merge`, then `scd2_zone_tier`. Each task depends on the one before it, so a failure stops everything downstream. Tasks retry automatically on failure, and the job is triggered manually for now to avoid unplanned compute use.
+
 ## Results
 
 | Check | Result |
@@ -94,6 +98,11 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 ![MERGE processes 10,000 new rows](docs/merge_10000_new_rows.png)
 ![Re-run processes 0 rows](docs/merge_rerun_zero.png)
+
+**Orchestration: the job runs the full pipeline in order**
+
+![Databricks Job run: all four tasks succeeded](docs/job_run_success.png)
+![Row counts after the job run](docs/job_row_counts.png)
 
 
 ## Design decisions
