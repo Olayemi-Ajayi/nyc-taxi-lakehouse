@@ -68,6 +68,10 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 **6. Orchestration (`nyc_taxi_lakehouse_pipeline` Databricks Job).** Runs the pipeline end to end as a four-task workflow on serverless compute: `generate_events`, then `bronze_autoloader`, then `silver_merge`, then `scd2_zone_tier`. Each task depends on the one before it, so a failure stops everything downstream. Tasks retry automatically on failure, and the job is triggered manually for now to avoid unplanned compute use.
 
+**7. Governance (`05_governance`).** Documents the silver, quarantine and zone tables with Unity Catalog comments, tags `fare_amount` as financial data, and exposes the trips through a secure view (`gold.trips_secure`). The view masks `fare_amount` (column-level security) and limits rows to pickup zips 10001 to 10099 (row-level security) for anyone who is not a member of the `finance_analysts` group. Read access is granted on the view, not on the underlying table.
+
+| Secure view `gold.trips_secure` | `fare_amount` is `NULL` for every row, and `pickup_zip` is limited to 10001 to 10099 |
+
 ## Results
 
 | Check | Result |
@@ -79,6 +83,7 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 | Incremental MERGE after third batch | 10,000 new rows processed. Silver 29,691 + quarantine 309 = 30,000, matching bronze exactly |
 | Re-run with no new data | **0** rows processed, and silver stayed at 29,691 |
 | Hourly demand | Quiet in the early morning, rising through the day to a peak at 6 PM (2,000 trips) |
+
 ### Screenshots
 
 **Simulated data arrives as files**
@@ -103,6 +108,11 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 ![Databricks Job run: all four tasks succeeded](docs/job_run_success.png)
 ![Row counts after the job run](docs/job_row_counts.png)
+
+**Governance: the secure view masks fares and filters rows**
+
+![Secure view: fare_amount masked, pickup_zip filtered](docs/uc_secure_view_sample.png)
+![Permissions on the secure view](docs/uc_permissions.png)
 
 
 ## Design decisions
