@@ -111,6 +111,9 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 - Rebuild the pipeline with Lakeflow Spark Declarative Pipelines and expectations
 - Add CI/CD with Databricks Asset Bundles and GitHub Actions
 
+## Repository structure
+
+```
 nyc-taxi-lakehouse/
 ├── README.md
 ├── src/
