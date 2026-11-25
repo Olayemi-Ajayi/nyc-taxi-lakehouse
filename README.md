@@ -123,12 +123,6 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 - **Audit columns.** `_source_file` and `_ingested_at` make every row traceable to its file and arrival time.
 - **Medallion layers.** Raw data is never modified, so silver and gold can always be rebuilt from bronze.
 
-## Roadmap
-
-- Add Unity Catalog access controls (row and column security)
-- Rebuild the pipeline with Lakeflow Spark Declarative Pipelines and expectations
-- Add CI/CD with Databricks Asset Bundles and GitHub Actions
-
 ## Repository structure
 
 ```
@@ -141,4 +135,5 @@ nyc-taxi-lakehouse/
 │   ├── 03a_silver_gold_initial_build.py
 │   ├── 03b_silver_incremental_merge.py
 │   └── 04_scd2_zone_tier.py
+│   └── 05_governance.py
 └── docs/            (screenshots)
