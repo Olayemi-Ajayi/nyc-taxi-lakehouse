@@ -72,6 +72,10 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 | Secure view `gold.trips_secure` | `fare_amount` is `NULL` for every row, and `pickup_zip` is limited to 10001 to 10099 |
 
+**8. Declarative pipeline (Lakeflow Spark Declarative Pipelines).** Rebuilds silver and gold with declarative code in `06_lakeflow_pipeline.py`. Quality rules are declared as expectations (`valid_fare`, `valid_times`, `has_pickup_zip`) and the pipeline reports how many rows each rule dropped. Rows that fail are also written to a quarantine table with a reject reason. Tables are written to the `workspace.lakeflow` schema, so the notebook-based pipeline stays untouched for comparison.
+
+| Lakeflow pipeline | 49,445 rows written to silver, 555 dropped (1.1%), matching the notebook pipeline exactly |
+| Lakeflow expectations | `valid_fare` dropped 552, `valid_times` dropped 3, `has_pickup_zip` dropped 0 |
 ## Results
 
 | Check | Result |
