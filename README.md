@@ -118,6 +118,11 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 ![Secure view: fare_amount masked, pickup_zip filtered](docs/uc_secure_view_sample.png)
 ![Permissions on the secure view](docs/uc_permissions.png)
 
+**Lakeflow: declarative pipeline graph and data quality expectations**
+
+![Lakeflow pipeline graph](docs/lakeflow_pipeline_graph.png)
+![Lakeflow expectations](docs/lakeflow_expectations.png)
+
 
 ## Design decisions
 
