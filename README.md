@@ -76,6 +76,17 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 
 | Lakeflow pipeline | 49,445 rows written to silver, 555 dropped (1.1%), matching the notebook pipeline exactly |
 | Lakeflow expectations | `valid_fare` dropped 552, `valid_times` dropped 3, `has_pickup_zip` dropped 0 |
+
+**9. CI/CD (`databricks.yml` and GitHub Actions).** The job is defined as code in a Databricks Asset Bundle (labelled "Declarative Automation Bundles" in the workspace UI) in `databricks.yml`. A GitHub Actions workflow (`.github/workflows/deploy.yml`) validates the bundle and deploys it to Databricks, either manually or when the pipeline code changes on `main`. Credentials are stored as GitHub secrets and never in the repository.
+
+| CI/CD deployment | The bundle validated and deployed from GitHub Actions in 17 seconds, creating the four-task job in Databricks (deployed from commit `a0f911a` on `main`) |
+
+**CI/CD: GitHub Actions deploys the Databricks job**
+
+![GitHub Actions run](docs/cicd_actions_run.png)
+![Job deployed to Databricks](docs/cicd_deployed_tasks.png)
+
+
 ## Results
 
 | Check | Result |
@@ -137,13 +148,17 @@ Databricks (Free Edition, serverless compute), Delta Lake, Unity Catalog (catalo
 ```
 nyc-taxi-lakehouse/
 ├── README.md
+├── databricks.yml
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
 ├── src/
 │   ├── 00_setup.sql
 │   ├── 01_generate_events.py
 │   ├── 02_bronze_autoloader.py
 │   ├── 03a_silver_gold_initial_build.py
 │   ├── 03b_silver_incremental_merge.py
-│   └── 04_scd2_zone_tier.py
-│   └── 05_governance.py
+│   ├── 04_scd2_zone_tier.py
+│   ├── 05_governance.py
 │   └── 06_lakeflow_pipeline.py
 └── docs/            (screenshots)
