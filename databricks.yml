@@ -1,0 +1,40 @@
+bundle:
+  name: nyc_taxi_lakehouse
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-ccca9975-fef4.cloud.databricks.com
+
+resources:
+  jobs:
+    nyc_taxi_pipeline:
+      name: nyc_taxi_lakehouse_pipeline_bundle
+      tasks:
+        - task_key: generate_events
+          max_retries: 2
+          notebook_task:
+            notebook_path: ./src/01_generate_events.py
+
+        - task_key: bronze_autoloader
+          depends_on:
+            - task_key: generate_events
+          max_retries: 2
+          notebook_task:
+            notebook_path: ./src/02_bronze_autoloader.py
+
+        - task_key: silver_merge
+          depends_on:
+            - task_key: bronze_autoloader
+          max_retries: 2
+          notebook_task:
+            notebook_path: ./src/03b_silver_incremental_merge.py
+
+        - task_key: scd2_zone_tier
+          depends_on:
+            - task_key: silver_merge
+          max_retries: 2
+          notebook_task:
+            notebook_path: ./src/04_scd2_zone_tier.py
