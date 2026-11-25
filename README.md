@@ -145,4 +145,5 @@ nyc-taxi-lakehouse/
 │   ├── 03b_silver_incremental_merge.py
 │   └── 04_scd2_zone_tier.py
 │   └── 05_governance.py
+│   └── 06_lakeflow_pipeline.py
 └── docs/            (screenshots)
